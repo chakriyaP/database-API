@@ -6,8 +6,8 @@ import {
 const route = express.Router();
 
 route.get("/", (req, res) => {
-    console.log(`GET orders`);
-    getAll("orders").then((values) => {
+    console.log(`GET customers`);
+    getAll("customers").then((values) => {
         console.log(values);
         res.json(values);
     });
