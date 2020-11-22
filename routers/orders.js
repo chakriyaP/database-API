@@ -7,7 +7,7 @@ const route = express.Router();
 
 route.get("/", (req, res) => {
     console.log(`GET orders`);
-    getAll("orders").then((values) => {
+    getAll("orders_1").then((values) => {
         console.log(values);
         res.json(values);
     });
