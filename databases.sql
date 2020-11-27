@@ -173,7 +173,7 @@ AS SELECT c_id, fname, lname, customers_address, phone, id_line
   FROM customers, customers_address 
  WHERE c_id = cid_c_address;
 
- CREATE VIEW orders_1
-AS SELECT order_id,ocid,order_amount,size,ocolor,opid,o_start_date,o_end_date
+CREATE VIEW orders_1
+AS SELECT order_id,ocid,order_amount,size,ocolor,opid,o_start_date,o_end_date,s_type
 FROM orders,orders_size,order_color
 WHERE order_id = order_id_size AND order_id_size = color_order_id;

@@ -4,6 +4,10 @@ import {
     getOrders
 } from "../method/functionGet.js";
 
+import {
+    postOrders
+} from "../method/functionPost.js"
+
 const route = express.Router();
 
 route.get("/", (req, res) => {
@@ -16,6 +20,13 @@ route.get("/", (req, res) => {
 
 route.post("/", (req, res) => {
     getOrders(req).then((values) => {
+        console.log(values);
+        res.json(values);
+    });
+});
+
+route.post("/insert", (req, res) => {
+    postOrders(req).then((values) => {
         console.log(values);
         res.json(values);
     });

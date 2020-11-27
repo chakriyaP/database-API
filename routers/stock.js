@@ -26,7 +26,7 @@ route.post("/", (req, res) => {
 
 route.post("/insert", (req, res) => {
     postStock(req).then((values) => {
-        console.log(req);
+        console.log(values);
         res.json({ massage: "post sucess" });
     });
 });

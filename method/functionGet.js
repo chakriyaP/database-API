@@ -111,12 +111,12 @@ export async function getEmployee(req) {
 }
 
 export async function getOrders(req) {
-    const { order_id, ocid, order_amount, size, bcolor, opid, o_start_date, o_end_date } = req.body
+    const { order_id, ocid, order_amount, size, bcolor, opid, o_start_date, o_end_date, s_type } = req.body
     const queryString = `SELECT *
     FROM orders_1 
     WHERE order_id LIKE '%${order_id}%' AND ocid LIKE '%${ocid}%' AND order_amount LIKE '%${order_amount}%'
      AND size LIKE '%${size}%' AND bcolor LIKE '%${bcolor}%' AND opid LIKE '%${opid}%' 
-     AND o_start_date LIKE '%${o_start_date}%' AND o_end_date LIKE '%${o_end_date}%';`;
+     AND o_start_date LIKE '%${o_start_date}%' AND o_end_date LIKE '%${o_end_date}%'  AND s_type LIKE '%${s_type}%';`;
     let res = await connector
         .getConnection()
         .then(async(conn) => {
