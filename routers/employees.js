@@ -6,6 +6,9 @@ import {
 import {
     postEmployee
 } from "../method/functionPost.js";
+import {
+    deleteemployee
+} from "../method/functionDelete.js";
 
 const route = express.Router();
 
@@ -30,6 +33,13 @@ route.post("/insert", (req, res) => {
     postEmployee(req).then((values) => {
         console.log(values);
         res.json({ massage: "post sucess" });
+    });
+});
+
+route.delete("/delete", (req, res) => {
+    deleteemployee(req).then((values) => {
+        console.log(values);
+        res.json({ massage: "delete sucess" });
     });
 });
 
