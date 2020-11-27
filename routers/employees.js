@@ -3,6 +3,9 @@ import {
     getAll,
     getEmployee
 } from "../method/functionGet.js";
+import {
+    postEmployee
+} from "../method/functionPost.js";
 
 const route = express.Router();
 
@@ -20,5 +23,14 @@ route.post("/", (req, res) => {
         console.log(values);
         res.json(values);
     });
+
 });
+
+route.post("/insert", (req, res) => {
+    postEmployee(req).then((values) => {
+        console.log(values);
+        res.json({ massage: "post sucess" });
+    });
+});
+
 export default route;

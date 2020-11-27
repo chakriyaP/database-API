@@ -3,6 +3,9 @@ import {
     getAll,
     getStock
 } from "../method/functionGet.js";
+import {
+    postStock
+} from "../method/functionPost.js";
 
 const route = express.Router();
 
@@ -18,6 +21,13 @@ route.post("/", (req, res) => {
     getStock(req).then((values) => {
         console.log(values);
         res.json(values);
+    });
+});
+
+route.post("/insert", (req, res) => {
+    postStock(req).then((values) => {
+        console.log(req);
+        res.json({ massage: "post sucess" });
     });
 });
 
