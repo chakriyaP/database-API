@@ -3,6 +3,9 @@ import {
     getAll,
     getPattern,
 } from "../method/functionGet.js";
+import {
+    postPattern
+} from "../method/functionPost.js";
 
 const route = express.Router();
 
@@ -20,6 +23,14 @@ route.post("/", (req, res) => {
         res.json(values);
     });
 });
+
+route.post("/insert", (req, res) => {
+    postPattern(req).then((values) => {
+        console.log(values);
+        res.json({ massage: "post sucess" });
+    });
+});
+
 
 
 export default route;
