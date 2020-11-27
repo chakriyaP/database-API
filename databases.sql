@@ -22,12 +22,6 @@ CREATE TABLE PATTERNS (
   CONSTRAINT pk_p_id primary key (p_id)
 );
 
-DROP TABLE IF EXISTS STOCK;
-CREATE TABLE STOCK (
-  color         varchar(10) not null,
-  amount_stock  int not null,    
-  CONSTRAINT pk_stype_color primary key (color)
-);
 
 DROP TABLE IF EXISTS ORDERS;
 CREATE TABLE ORDERS (
@@ -43,6 +37,13 @@ CREATE TABLE ORDERS (
   CONSTRAINT fk_opid foreign key (opid) references PATTERNS(p_id)
 );
 
+DROP TABLE IF EXISTS STOCK;
+CREATE TABLE STOCK (
+  color         varchar(10) not null,
+  amount_stock  int not null,  
+  CONSTRAINT pk_stype_color primary key (color)
+);
+
 DROP TABLE IF EXISTS EMPLOYEE;
 CREATE TABLE EMPLOYEE (
   eid           char(8) not null,
@@ -50,15 +51,6 @@ CREATE TABLE EMPLOYEE (
   empphone      char(10) not null,
   CONSTRAINT pk_eid primary key (eid),
   CONSTRAINT empphone UNIQUE (empphone)
-);
-
-DROP TABLE IF EXISTS ORDERING;
-CREATE TABLE ORDERING (
-  order_cid        char(8) not null,
-  ordering_id      char(10) not null,   
-  CONSTRAINT pk_order_cid_ordering_id primary key (order_cid,ordering_id),
-  CONSTRAINT fk_order_cid foreign key (order_cid) references CUSTOMERS(c_id),
-  CONSTRAINT fk_ordering_id foreign key (ordering_id) references ORDERS(order_id)
 );
 
 DROP TABLE IF EXISTS CUSTOMERS_ADDRESS;
@@ -69,30 +61,21 @@ CREATE TABLE CUSTOMERS_ADDRESS (
   CONSTRAINT fk_cid_c_address foreign key (cid_c_address) references CUSTOMERS(c_id)
 );
 
-DROP TABLE IF EXISTS BELONG_TO;
-CREATE TABLE BELONG_TO (
-  bcolor      varchar(10) not null,  
-  border_id      char(10) not null,   
-  CONSTRAINT pk_bcolor_border_id primary key (bcolor,border_id),
-  CONSTRAINT fk_bcolor foreign key (bcolor) references STOCK(color),
-  CONSTRAINT fk_border_id foreign key (border_id) references ORDERS(order_id)
+DROP TABLE IF EXISTS ORDER_COLOR;
+CREATE TABLE ORDER_COLOR (
+  ocolor      varchar(10) not null,  
+  color_order_id      char(10) not null,   
+  CONSTRAINT pk_ocolor_color_order_id primary key (ocolor,color_order_id),
+  CONSTRAINT fk_bcolor foreign key (ocolor) references STOCK(color),
+  CONSTRAINT fk_ocolor_order_id foreign key (color_order_id) references ORDERS(order_id)
 );
 
 DROP TABLE IF EXISTS ORDERS_SIZE;
 CREATE TABLE ORDERS_SIZE (
   size               varchar(5) not null,  
   order_id_size      char(10) not null,   
-  CONSTRAINT pk_order_id_size_size primary key (order_id_size,size),
+  CONSTRAINT pk_order_id_size_size primary key (order_id_size),
   CONSTRAINT fk_order_id_size foreign key (order_id_size) references ORDERS(order_id)
-);
-
-DROP TABLE IF EXISTS DEPENDS_ON;
-CREATE TABLE DEPENDS_ON (
-  pid_depends           char(5) not null, 
-  order_id_depends      char(10) not null,   
-  CONSTRAINT pk_pid_depends_order_id_depends primary key (pid_depends,order_id_depends),
-  CONSTRAINT fk_order_id_depends foreign key (order_id_depends) references ORDERS(order_id),
-  CONSTRAINT fk_pid_depends foreign key (pid_depends) references PATTERNS(p_id)
 );
 
 DROP TABLE IF EXISTS WORKS_ON;
@@ -113,7 +96,7 @@ INSERT INTO CUSTOMERS VALUE ('Pakin', 'Boonpeng', 'tomato_52', '00000005', '0955
 INSERT INTO CUSTOMERS VALUE ('Pattarathida', 'Chayakornnan', 'namtttoey', '00000006', '0833392288');
 INSERT INTO CUSTOMERS VALUE ('Chuan', 'Seehanam', 'chun06', '00000007', '0872163489');
 
-INSERT INTO PATTERNS VALUE ('p0001', 200);
+INSERT INTO PATTERNS VALUE ('p0001', 50);
 INSERT INTO PATTERNS VALUE ('p0002', 20);
 INSERT INTO PATTERNS VALUE ('p0003', 41);  
 INSERT INTO PATTERNS VALUE ('p0004', 25);
@@ -147,16 +130,6 @@ INSERT INTO EMPLOYEE VALUE ('E0000002', 'Ratthanan Kitirat', '0655569868');
 INSERT INTO EMPLOYEE VALUE ('E0000003', 'Natdanai Deelert', '0815512146');
 INSERT INTO EMPLOYEE VALUE ('E0000004', 'Narawich Insamian', '0855599975');
 
-INSERT INTO ORDERING VALUE ('00000001', '1000000001');
-INSERT INTO ORDERING VALUE ('00000002', '1000000002');
-INSERT INTO ORDERING VALUE ('00000003', '1000000003');
-INSERT INTO ORDERING VALUE ('00000004', '1000000004');
-INSERT INTO ORDERING VALUE ('00000005', '1000000005');
-INSERT INTO ORDERING VALUE ('00000005', '1000000006');
-INSERT INTO ORDERING VALUE ('00000006', '1000000007');
-INSERT INTO ORDERING VALUE ('00000007', '1000000008');
-
-
 INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000001', 'Khon Kaen');
 INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000002', 'Khon Kaen');
 INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000003', 'Bangkok');
@@ -165,31 +138,20 @@ INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000005', 'Nonthaburi');
 INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000006', 'Khon Kaen');
 INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000007', 'Khon Kaen');
 
-INSERT INTO BELONG_TO VALUE ('Orange', '1000000001');
-INSERT INTO BELONG_TO VALUE ('Magenta', '1000000002');
-INSERT INTO BELONG_TO VALUE ('Green', '1000000003');
-INSERT INTO BELONG_TO VALUE ('Gray', '1000000004');
-INSERT INTO BELONG_TO VALUE ('Black', '1000000005');
-INSERT INTO BELONG_TO VALUE ('Black', '1000000006');
-INSERT INTO BELONG_TO VALUE ('White', '1000000007');
-INSERT INTO BELONG_TO VALUE ('Yellow', '1000000008');
+INSERT INTO ORDER_COLOR VALUE ('Orange', '1000000001');
+INSERT INTO ORDER_COLOR VALUE ('Magenta', '1000000002');
+INSERT INTO ORDER_COLOR VALUE ('Green', '1000000003');
+INSERT INTO ORDER_COLOR VALUE ('Gray', '1000000004');
+INSERT INTO ORDER_COLOR VALUE ('Black', '1000000005');
+INSERT INTO ORDER_COLOR VALUE ('Black', '1000000006');
+INSERT INTO ORDER_COLOR VALUE ('White', '1000000007');
+INSERT INTO ORDER_COLOR VALUE ('Yellow', '1000000008');
 
 INSERT INTO  ORDERS_SIZE VALUE  ('S', '1000000001');
-INSERT INTO  ORDERS_SIZE VALUE  ('M', '1000000001');
-INSERT INTO  ORDERS_SIZE VALUE  ('L', '1000000001');
-INSERT INTO  ORDERS_SIZE VALUE  ('XL', '1000000001');
 INSERT INTO  ORDERS_SIZE VALUE  ('M', '1000000002');
 INSERT INTO  ORDERS_SIZE VALUE  ('L', '1000000003');
 INSERT INTO  ORDERS_SIZE VALUE  ('XXXL', '1000000004');
 INSERT INTO  ORDERS_SIZE VALUE  ('XXL', '1000000005');
-
-INSERT INTO DEPENDS_ON VALUE ('p0001', '1000000001');
-INSERT INTO DEPENDS_ON VALUE ('p0002', '1000000001');
-INSERT INTO DEPENDS_ON VALUE ('p0003', '1000000002');
-INSERT INTO DEPENDS_ON VALUE ('p0003', '1000000006');
-INSERT INTO DEPENDS_ON VALUE ('p0004', '1000000004');
-INSERT INTO DEPENDS_ON VALUE ('p0005', '1000000003');
-INSERT INTO DEPENDS_ON VALUE ('p0005', '1000000005');
 
 INSERT INTO WORKS_ON VALUE ('E0000003', '1000000001', 2.12);
 INSERT INTO WORKS_ON VALUE ('E0000004', '1000000001', 4.34);
@@ -208,10 +170,10 @@ INSERT INTO WORKS_ON VALUE ('E0000002', '1000000006', 9.24);
 
 CREATE VIEW customers1
 AS SELECT c_id, fname, lname, customers_address, phone, id_line
-   FROM customers, customers_address 
-   WHERE c_id = cid_c_address;
+  FROM customers, customers_address 
+ WHERE c_id = cid_c_address;
 
-CREATE VIEW orders_1
-AS SELECT order_id,ocid,order_amount,size,bcolor,opid,o_start_date,o_end_date
-FROM orders,orders_size,belong_to 
-WHERE order_id = order_id_size AND order_id_size = border_id;
+ CREATE VIEW orders_1
+AS SELECT order_id,ocid,order_amount,size,ocolor,opid,o_start_date,o_end_date
+FROM orders,orders_size,order_color
+WHERE order_id = order_id_size AND order_id_size = color_order_id;
