@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS CUSTOMERS;
 CREATE TABLE CUSTOMERS (
   fname         varchar(25) ,
   lname         varchar(25) ,
-  id_line       char(15) not null,
+  id_line       varchar(15) not null,
   c_id          char(8) not null, 
   phone         char(10) not null,
   CONSTRAINT pk_c_id primary key (c_id),
@@ -22,6 +22,12 @@ CREATE TABLE PATTERNS (
   CONSTRAINT pk_p_id primary key (p_id)
 );
 
+DROP TABLE IF EXISTS STOCK;
+CREATE TABLE STOCK (
+  color         varchar(10) not null,
+  amount_stock  int not null,  
+  CONSTRAINT pk_stype_color primary key (color)
+);
 
 DROP TABLE IF EXISTS ORDERS;
 CREATE TABLE ORDERS (
@@ -31,18 +37,15 @@ CREATE TABLE ORDERS (
   s_type         varchar(20) not null,
   o_end_date      DATE,
   o_start_date   DATE,
-  order_id      char(10) not null,     
+  order_id      char(10) not null,
+  ocolor      varchar(10) not null,
+  size          varchar(5) not null,
   CONSTRAINT pk_ordering_id primary key (order_id),
   CONSTRAINT fk_ocid foreign key (ocid) references CUSTOMERS(c_id),
-  CONSTRAINT fk_opid foreign key (opid) references PATTERNS(p_id)
+  CONSTRAINT fk_opid foreign key (opid) references PATTERNS(p_id),
+  CONSTRAINT fk_bcolor foreign key (ocolor) references STOCK(color)
 );
 
-DROP TABLE IF EXISTS STOCK;
-CREATE TABLE STOCK (
-  color         varchar(10) not null,
-  amount_stock  int not null,  
-  CONSTRAINT pk_stype_color primary key (color)
-);
 
 DROP TABLE IF EXISTS EMPLOYEE;
 CREATE TABLE EMPLOYEE (
@@ -57,25 +60,8 @@ DROP TABLE IF EXISTS CUSTOMERS_ADDRESS;
 CREATE TABLE CUSTOMERS_ADDRESS (
   cid_c_address        char(8) not null,
   customers_address      varchar(64) not null,   
-  CONSTRAINT pk_cid_address primary key (cid_c_address),
+  CONSTRAINT pk_cid_address primary key (cid_c_address,customers_address),
   CONSTRAINT fk_cid_c_address foreign key (cid_c_address) references CUSTOMERS(c_id)
-);
-
-DROP TABLE IF EXISTS ORDER_COLOR;
-CREATE TABLE ORDER_COLOR (
-  ocolor      varchar(10) not null,  
-  color_order_id      char(10) not null,   
-  CONSTRAINT pk_ocolor_color_order_id primary key (ocolor,color_order_id),
-  CONSTRAINT fk_bcolor foreign key (ocolor) references STOCK(color),
-  CONSTRAINT fk_ocolor_order_id foreign key (color_order_id) references ORDERS(order_id)
-);
-
-DROP TABLE IF EXISTS ORDERS_SIZE;
-CREATE TABLE ORDERS_SIZE (
-  size               varchar(5) not null,  
-  order_id_size      char(10) not null,   
-  CONSTRAINT pk_order_id_size_size primary key (order_id_size),
-  CONSTRAINT fk_order_id_size foreign key (order_id_size) references ORDERS(order_id)
 );
 
 DROP TABLE IF EXISTS WORKS_ON;
@@ -116,14 +102,14 @@ INSERT INTO STOCK VALUE ('Gray', 35);
 INSERT INTO STOCK VALUE ('Magenta', 98);
 
 
-INSERT INTO ORDERS VALUE ('00000001',50,'p0001','T-shirt','1976-04-05','1976-04-10','1000000001');
-INSERT INTO ORDERS VALUE ('00000002',20,'p0002','Short-sleeved shirt','1976-04-11','1976-04-16','1000000002');
-INSERT INTO ORDERS VALUE ('00000003',41,'p0003','T-shirt','1976-04-05','1976-04-20','1000000003');
-INSERT INTO ORDERS VALUE ('00000004',25,'p0004','Short-sleeved shirt','1976-04-26','1976-04-29','1000000004');
-INSERT INTO ORDERS VALUE ('00000005',32,'p0005','T-shirt','1976-04-10','1976-05-17','1000000005');
-INSERT INTO ORDERS VALUE ('00000005',10,'p0004','Short-sleeved shirt','1976-04-26','1976-04-29','1000000006');
-INSERT INTO ORDERS VALUE ('00000006',10,'p0002','T-shirt','1976-05-20','1976-05-27','1000000007');
-INSERT INTO ORDERS VALUE ('00000007',10,'p0002','T-shirt','1976-05-23','1976-05-28','1000000008');
+INSERT INTO ORDERS VALUE ('00000001',50,'p0001','T-shirt','2020-05-10','2020-05-7','1000000001','Orange','S');
+INSERT INTO ORDERS VALUE ('00000002',20,'p0002','Short-sleeved shirt','2020-10-15','2020-10-11','1000000002','Magenta','M');
+INSERT INTO ORDERS VALUE ('00000003',41,'p0003','T-shirt','2020-10-17','2020-10-12','1000000003','Green','L');
+INSERT INTO ORDERS VALUE ('00000004',25,'p0004','Short-sleeved shirt','2020-10-20','2020-10-15','1000000004','Gray','XXXL');
+INSERT INTO ORDERS VALUE ('00000005',32,'p0005','T-shirt','2020-11-05','2020-11-1','1000000005','Black','XXL');
+INSERT INTO ORDERS VALUE ('00000005',10,'p0004','Short-sleeved shirt','2020-11-07','2020-11-04','1000000006','Pink','M');
+INSERT INTO ORDERS VALUE ('00000006',10,'p0002','T-shirt','2020-11-10','2020-11-07','1000000007','Black','S');
+INSERT INTO ORDERS VALUE ('00000007',10,'p0002','T-shirt','2020-11-15','2020-11-10','1000000008','Yellow','M');
 
 INSERT INTO EMPLOYEE VALUE ('E0000001', 'Methus Srisai', '0957094125');
 INSERT INTO EMPLOYEE VALUE ('E0000002', 'Ratthanan Kitirat', '0655569868');
@@ -138,20 +124,7 @@ INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000005', 'Nonthaburi');
 INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000006', 'Khon Kaen');
 INSERT INTO CUSTOMERS_ADDRESS VALUE ('00000007', 'Khon Kaen');
 
-INSERT INTO ORDER_COLOR VALUE ('Orange', '1000000001');
-INSERT INTO ORDER_COLOR VALUE ('Magenta', '1000000002');
-INSERT INTO ORDER_COLOR VALUE ('Green', '1000000003');
-INSERT INTO ORDER_COLOR VALUE ('Gray', '1000000004');
-INSERT INTO ORDER_COLOR VALUE ('Black', '1000000005');
-INSERT INTO ORDER_COLOR VALUE ('Black', '1000000006');
-INSERT INTO ORDER_COLOR VALUE ('White', '1000000007');
-INSERT INTO ORDER_COLOR VALUE ('Yellow', '1000000008');
 
-INSERT INTO  ORDERS_SIZE VALUE  ('S', '1000000001');
-INSERT INTO  ORDERS_SIZE VALUE  ('M', '1000000002');
-INSERT INTO  ORDERS_SIZE VALUE  ('L', '1000000003');
-INSERT INTO  ORDERS_SIZE VALUE  ('XXXL', '1000000004');
-INSERT INTO  ORDERS_SIZE VALUE  ('XXL', '1000000005');
 
 INSERT INTO WORKS_ON VALUE ('E0000003', '1000000001', 2.12);
 INSERT INTO WORKS_ON VALUE ('E0000004', '1000000001', 4.34);
@@ -170,10 +143,17 @@ INSERT INTO WORKS_ON VALUE ('E0000002', '1000000006', 9.24);
 
 CREATE VIEW customers1
 AS SELECT c_id, fname, lname, customers_address, phone, id_line
-  FROM customers, customers_address 
- WHERE c_id = cid_c_address;
+FROM customers, customers_address 
+WHERE c_id = cid_c_address;
 
 CREATE VIEW orders_1
 AS SELECT order_id,ocid,order_amount,size,ocolor,opid,o_start_date,o_end_date,s_type
-FROM orders,orders_size,order_color
-WHERE order_id = order_id_size AND order_id_size = color_order_id;
+FROM orders;
+
+
+INSERT INTO ORDERS VALUE ('00000001',30,'p0001','T-shirt','2020-05-10','2020-05-7','1000000009','Gray','XL');
+
+
+INSERT INTO ORDERS VALUE ('00000002',30,'p0001','T-shirt','2020-05-10','2020-05-7','1000000010','Pink','L');
+
+
